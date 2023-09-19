@@ -14,13 +14,9 @@ public class Main {
         books.add(book2);
         books.add(book3);
 
-        System.out.println("1. Add abook to the library");
-        System.out.println("2. Search for a book by name");
-        System.out.println("3. List all available books");
-        System.out.println("4. Return a book");
-        System.out.println("5. Quit");
         String input = "";
         while (!input.equalsIgnoreCase("5")){
+            printMenu();
             input = sc.nextLine();
             switch (input){
                 case "1" -> {
@@ -43,13 +39,59 @@ public class Main {
 
                 }
 
-                
+                case "2" -> {
+                    System.out.println("What is the title?");
+                    String title = sc.nextLine();
+                    Book foundBook = searchBookByTitle(title, books);
+                    if (foundBook != null)
+                        if (foundBook.isAvailable()){
+                            System.out.println(foundBook);
+                            System.out.println("Do you whant to borrow it? (y/n)");
+                            String borrow = sc.nextLine();
+                            if (borrow.equalsIgnoreCase("y")){
+                                foundBook.loan();
+                                System.out.println("You have borrowed " + foundBook.getTitle());
+                            }else{
+                                System.out.println("You have not borrowed the book.");
+                            }
+                        }else {
+                            System.out.println(foundBook);
+                            System.out.println("It is not avaliable right now.");
+                        }
 
-            }
+                    else{
+                        System.out.println("Book not found.");
+                    }
+                }
 
-            for (Book book: books) {
-                System.out.println();
-                System.out.println(book);
+                case "3" -> {
+                    for (Book book: books) {
+                        if (book.isAvailable()){
+                            System.out.println();
+                            System.out.println(book);
+                        }
+                    }
+                }
+                case "4" -> {
+                    System.out.println("What is the title");
+                    String title = sc.nextLine();
+                    Book foundBook = searchBookByTitle(title, books);
+                    if(foundBook != null){
+                        if (!foundBook.isAvailable()){
+                            foundBook.returnBook();
+                            System.out.println("Tack för att du lämnade tillbaka " + foundBook.getTitle());
+                        }
+                    }
+
+                }
+
+                case "5" -> {
+
+                }
+                default -> {
+                    System.out.println("Ogiltigt menyval");
+                }
+
             }
 
 
@@ -59,6 +101,22 @@ public class Main {
 
 
     }
+    public static void printMenu(){
+        System.out.println();
+        System.out.println("1. Add abook to the library");
+        System.out.println("2. Search for a book by name");
+        System.out.println("3. List all available books");
+        System.out.println("4. Return a book");
+        System.out.println("5. Quit");
+    }
 
+    public static Book searchBookByTitle(String title, ArrayList<Book> books){
+        for(Book book : books){
+            if(book.getTitle().equalsIgnoreCase(title)){
+                return book;
+            }
+        }
+        return null;
+    }
 
 }
