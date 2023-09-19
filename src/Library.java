@@ -26,6 +26,38 @@ public class Library {
         return books;
     }
 
+    public void addBook(Book book){
+        books.add(book);
+    }
+
+    public Book searchBookByTitle(String title){
+        for (Book book : books) {
+            if (book.getTitle().equalsIgnoreCase(title)) {
+                return book;
+            }
+        }
+        return null;
+    }
+
+    public Book returnBook(String title){
+
+        Book book = this.searchBookByTitle(title);
+
+        if (book != null && !book.isAvailable()){
+            book.setAvailable(true);
+            return book;
+        }
+        return null;
+    }
+
+//    public ArrayList<Book> getAvalibleBooks(){
+//        ArrayList<Book> avalibleBooks = new ArrayList<>();
+//        for (Book book: books) {
+//
+//        }
+//    }
+
+
 
 
 }

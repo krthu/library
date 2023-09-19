@@ -4,15 +4,7 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        ArrayList<Book> books = new ArrayList<>();
-
-        Book book1 = new Book("Lord of The Rings", "JRR Tolkien", 1973, 3);
-        Book book2 = new Book("Lord of The Two Towers", "JRR Tolkien", 1976, 4);
-        Book book3 = new Book("Harry Potter and the philosphers stone", "JK Rowling", 1990, 1);
-
-        books.add(book1);
-        books.add(book2);
-        books.add(book3);
+        Library library = createLibrary();
 
         String input = "";
         while (!input.equalsIgnoreCase("5")) {
@@ -35,14 +27,14 @@ public class Main {
                     sc.nextLine();
 
                     Book book = new Book(title, author, publishingYear, edition);
-                    books.add(book);
+                    library.addBook(book);
 
                 }
 
                 case "2" -> {
                     System.out.println("What is the title?");
                     String title = sc.nextLine();
-                    Book foundBook = searchBookByTitle(title, books);
+                    Book foundBook = library.searchBookByTitle(title);
                     if (foundBook != null)
                         if (foundBook.isAvailable()) {
                             System.out.println(foundBook);
@@ -65,6 +57,7 @@ public class Main {
                 }
 
                 case "3" -> {
+                    ArrayList<Book> books = library.getBooks();
                     for (Book book : books) {
                         if (book.isAvailable()) {
                             System.out.println();
@@ -75,15 +68,15 @@ public class Main {
                 case "4" -> {
                     System.out.println("What is the title");
                     String title = sc.nextLine();
-                    Book foundBook = searchBookByTitle(title, books);
-                    if (foundBook != null) {
-                        if (!foundBook.isAvailable()) {
-                            foundBook.returnBook();
-                            System.out.println("Tack för att du lämnade tillbaka " + foundBook.getTitle());
+                    Book book = library.returnBook(title);
+                    if (book != null){
+                        System.out.println("Tack för att du lämnade tillbaka " + book.getTitle());
+                     }
+                    else {
+                        System.out.println("Något gick fel. Boken inte återlämnad.");
                         }
                     }
 
-                }
                 case "5" -> {
                     System.out.println("Goodbye!");
                 }
@@ -104,13 +97,28 @@ public class Main {
         System.out.println("5. Quit");
     }
 
-    public static Book searchBookByTitle(String title, ArrayList<Book> books) {
-        for (Book book : books) {
-            if (book.getTitle().equalsIgnoreCase(title)) {
-                return book;
-            }
-        }
-        return null;
+    public static Library createLibrary(){
+        ArrayList<Book> books = new ArrayList<>();
+
+        Book book1 = new Book("Lord of The Rings", "JRR Tolkien", 1973, 3);
+        Book book2 = new Book("Lord of The Two Towers", "JRR Tolkien", 1976, 4);
+        Book book3 = new Book("Harry Potter and the philosphers stone", "JK Rowling", 1990, 1);
+
+        books.add(book1);
+        books.add(book2);
+        books.add(book3);
+        Library library = new Library("Alexandria", books);
+
+        return library;
     }
+
+//    public static Book searchBookByTitle(String title, ArrayList<Book> books) {
+//        for (Book book : books) {
+//            if (book.getTitle().equalsIgnoreCase(title)) {
+//                return book;
+//            }
+//        }
+//        return null;
+//    }
 
 }
