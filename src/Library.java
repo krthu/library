@@ -47,7 +47,9 @@ public class Library {
                 }
 
                 case "2" -> {
-                    searchForBookByTitleUI();
+                    //searchForBookByTitleUI();
+                    searchForBookByTermUI();
+
                 }
 
                 case "3" -> {
@@ -61,13 +63,17 @@ public class Library {
                 case "5" -> {
                     System.out.println("Goodbye!");
                 }
+
+//                case "6" ->{
+//                    System.out.println(searchForBookByTerm("Lord"));
+//                }
+
                 default -> {
-                    System.out.println("Ogiltigt menyval");
+                    System.out.println("Invalid optioin");
                 }
             }
         }
     }
-
 
     public Book searchBookByTitle(String title) {
         for (Book book : books) {
@@ -124,7 +130,7 @@ public class Library {
         Book foundBook = searchBookByTitle(title);
         if (foundBook != null)
             if (foundBook.isAvailable()) {
-                borrow(foundBook);
+                borrowUI(foundBook);
             } else {
                 System.out.println(foundBook);
                 System.out.println("It is not avaliable right now.");
@@ -135,14 +141,54 @@ public class Library {
         }
     }
 
+    private void searchForBookByTermUI(){
+        System.out.println("What is the title?");
+        String title = sc.nextLine();
+
+        ArrayList<Book> foundBooks = searchForBookByTerm(title);
+        System.out.println("Found " + foundBooks.size() + " matches.");
+        if (!foundBooks.isEmpty()){
+            int choise = 0;
+            boolean validChoise = false;
+            while (!validChoise) {
+
+                for (int i = 0; i < foundBooks.size(); i++) {
+                    Book currentBook = foundBooks.get(i);
+                    System.out.println((i + 1) + ": " + currentBook.getTitle() + " by " + currentBook.getAuthor());
+                }
+                System.out.println((foundBooks.size() + 1) + ": Cancel");
+                choise = getValidInt("Choose a book");
+                if(choise >= 1 && choise <= foundBooks.size()+1){
+                    validChoise = true;
+                }
+            }
+            if(choise <= foundBooks.size()) {
+                borrowUI(foundBooks.get(choise - 1));
+            }else {
+                System.out.println("Invalid option.");
+            }
+
+        }
+    }
+
+    private ArrayList<Book> searchForBookByTerm(String title){
+        ArrayList<Book> foundBooks = new ArrayList<>();
+        for (Book book : books) {
+            if (book.getTitle().toLowerCase().contains(title.toLowerCase())) {
+                foundBooks.add(book);
+            }
+        }
+        return foundBooks;
+    }
+
     private void returnBookUI() {
         System.out.println("What is the title");
         String title = sc.nextLine();
         Book book = returnBook(title);
         if (book != null) {
-            System.out.println("Tack för att du lämnade tillbaka " + book.getTitle());
+            System.out.println("Thank you for returning " + book.getTitle());
         } else {
-            System.out.println("Något gick fel. Boken inte återlämnad.");
+            System.out.println("Something when wrong. Book not returned.");
         }
     }
 
@@ -154,10 +200,12 @@ public class Library {
             try {
                 input = sc.nextInt();
                 sc.nextLine();
+
+
                 return input;
             } catch (InputMismatchException e) {
                 sc.nextLine();
-                System.out.println("Ogiltigt värde. Försök igen.");
+                System.out.println("Has to be a integer.");
             }
         }
     }
@@ -176,7 +224,7 @@ public class Library {
         }
     }
 
-    private void borrow(Book book) {
+    private void borrowUI(Book book) {
         System.out.println(book);
         System.out.println();
         System.out.println("Do you whant to borrow " + book.getTitle() + "?");
@@ -192,13 +240,11 @@ public class Library {
                 }
                 case "2" -> {
                     System.out.println("You have not borrowed the book.");
-
                 }
                 default -> {
                     System.out.println("Ogiltigt val");
                     borrow = "";
-            }
-
+                }
             }
         }
     }
