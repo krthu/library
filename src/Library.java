@@ -9,7 +9,9 @@ public class Library {
 
     public Library(String name) {
         this.name = name;
+        this.books = new ArrayList<>();
     }
+
 
     public Library(String name, ArrayList<Book> books) {
         this.name = name;
@@ -19,6 +21,7 @@ public class Library {
     public String getName() {
         return name;
     }
+
 
     public void setName(String name) {
         this.name = name;
@@ -47,27 +50,23 @@ public class Library {
                 }
 
                 case "2" -> {
-                    //searchForBookByTitleUI();
-                    searchForBookByTermUI();
-
+                   if(!books.isEmpty()) {
+                       searchForBookByWordInTitleUI();
+                   }
                 }
-
                 case "3" -> {
-                    printBooks(true);
-
+                    if(!books.isEmpty()) {
+                        printBooks(true);
+                    }else {
+                        System.out.println("No books yet.");
+                    }
                 }
                 case "4" -> {
                     returnBookUI();
                 }
-
                 case "5" -> {
                     System.out.println("Goodbye!");
                 }
-
-//                case "6" ->{
-//                    System.out.println(searchForBookByTerm("Lord"));
-//                }
-
                 default -> {
                     System.out.println("Invalid optioin");
                 }
@@ -98,10 +97,12 @@ public class Library {
     public void printMenu() {
 
         System.out.println();
-        System.out.println("1. Add abook to the library");
-        System.out.println("2. Search for a book by name");
-        System.out.println("3. List all available books");
-        System.out.println("4. Return a book");
+        System.out.println("1. Add a book to the library");
+        if (!this.books.isEmpty()) {
+            System.out.println("2. Search for a book by name");
+            System.out.println("3. List all available books");
+            System.out.println("4. Return a book");
+        }
         System.out.println("5. Quit");
 
     }
@@ -141,7 +142,7 @@ public class Library {
         }
     }
 
-    private void searchForBookByTermUI(){
+    private void searchForBookByWordInTitleUI(){
         System.out.println("What is the title?");
         String title = sc.nextLine();
 

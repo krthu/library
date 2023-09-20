@@ -5,8 +5,9 @@ public class Main {
     public static void main(String[] args) {
 
         Library library = createLibrary();
+        Library library2 = new Library("Test");
 
-        library.enterLibrary();
+        library2.enterLibrary();
 
     }
 
