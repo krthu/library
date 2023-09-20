@@ -12,7 +12,6 @@ public class Library {
         this.books = new ArrayList<>();
     }
 
-
     public Library(String name, ArrayList<Book> books) {
         this.name = name;
         this.books = books;
@@ -21,7 +20,6 @@ public class Library {
     public String getName() {
         return name;
     }
-
 
     public void setName(String name) {
         this.name = name;
@@ -39,13 +37,13 @@ public class Library {
 
         System.out.println("----------Welcome to " + this.name + "----------");
         String input = "";
-        while (!input.equalsIgnoreCase("5")) {
+        while (!input.equalsIgnoreCase("0")) {
             printMenu();
             input = sc.nextLine();
             switch (input) {
                 case "1" -> {
-                    Book book = createBookUI();
-                    books.add(book);
+                    Book book = addBookUI();
+                    addBook(book);
                     System.out.println("Added " + book.getTitle() + " by " + book.getAuthor());
                 }
 
@@ -61,15 +59,12 @@ public class Library {
                         System.out.println("No books yet.");
                     }
                 }
-                case "4" -> {
-                    returnBookUI();
-                }
-                case "5" -> {
-                    System.out.println("Goodbye!");
-                }
-                default -> {
-                    System.out.println("Invalid optioin");
-                }
+                case "4" -> returnBookUI();
+
+                case "0" -> System.out.println("Goodbye!");
+
+                default -> System.out.println("Invalid option");
+
             }
         }
     }
@@ -87,8 +82,7 @@ public class Library {
 
         Book book = this.searchBookByTitle(title);
 
-        if (book != null && !book.isAvailable()) {
-            book.setAvailable(true);
+        if (book != null && book.returnBook()) {
             return book;
         }
         return null;
@@ -103,11 +97,11 @@ public class Library {
             System.out.println("3. List all available books");
             System.out.println("4. Return a book");
         }
-        System.out.println("5. Quit");
+        System.out.println("0. Leave library");
 
     }
 
-    private Book createBookUI() {
+    private Book addBookUI() {
 
         System.out.println("What is the title?");
         String title = sc.nextLine();
@@ -146,7 +140,8 @@ public class Library {
         System.out.println("What is the title?");
         String title = sc.nextLine();
 
-        ArrayList<Book> foundBooks = searchForBookByTerm(title);
+        ArrayList<Book> foundBooks = searchForBookByWordInTitle(title);
+
         System.out.println("Found " + foundBooks.size() + " matches.");
         if (!foundBooks.isEmpty()){
             int choise = 0;
@@ -172,7 +167,7 @@ public class Library {
         }
     }
 
-    private ArrayList<Book> searchForBookByTerm(String title){
+    private ArrayList<Book> searchForBookByWordInTitle(String title){
         ArrayList<Book> foundBooks = new ArrayList<>();
         for (Book book : books) {
             if (book.getTitle().toLowerCase().contains(title.toLowerCase())) {
@@ -201,7 +196,6 @@ public class Library {
             try {
                 input = sc.nextInt();
                 sc.nextLine();
-
 
                 return input;
             } catch (InputMismatchException e) {
@@ -243,7 +237,7 @@ public class Library {
                     System.out.println("You have not borrowed the book.");
                 }
                 default -> {
-                    System.out.println("Ogiltigt val");
+                    System.out.println("Invalid input");
                     borrow = "";
                 }
             }
